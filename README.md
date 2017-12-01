@@ -1,28 +1,55 @@
-# Myangularapp
+# Steps followed
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.3.0.
+In assets/dummy-data.js, i have a normal function.
 
-## Development server
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+```javascript
+function greetings(){
+ return {
+   data: "Greetings from External JS"
+ }
+}
+```
 
-## Code scaffolding
+In tsconfig.json
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+```javascript
+"allowJs": true,
+```
 
-## Build
+In angular-cli.json
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `-prod` flag for a production build.
+```javascript
+"scripts": [
+   "./assets/dummy-data.js"
+ ],
+```
+If you check the Source tab, scripts.bundle.js, that is already a part of the final bundle.
+![alt text](https://udemy-images.s3.amazonaws.com/redactor/raw/2017-12-01_10-47-17-60e88ed51ed1de19135341c06b4a68d0.JPG)
 
-## Running unit tests
+In whichever component
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+```javascript
+import { Component, OnInit, AfterViewInit, AfterContentInit } from '@angular/core';
+declare var greetings: any; // declare with the name of the function 
+ 
+@Component({
+ selector: 'app-root',
+ templateUrl: './app.component.html',
+ styleUrls: ['./app.component.css']
+})
+export class AppComponent implements OnInit {
+ title = 'app';
+ message;
+ ngOnInit(): void {
+   this.message = greetings(); // use it like this in any life cycle hook
+ }
+}
+```
+In html
 
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
-Before running the tests make sure you are serving the app via `ng serve`.
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+```html
+<h1> Message is {‌{ message.data }} </h1>
+```
+Output
+![alt text](https://udemy-images.s3.amazonaws.com/redactor/raw/2017-12-01_10-48-42-3360438143e13b865d7c6eafaa0b0ef9.JPG)
